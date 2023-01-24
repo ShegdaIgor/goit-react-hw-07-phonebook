@@ -2,12 +2,17 @@ import css from './ContactsList.module.css';
 import { DeleteBtn } from 'components/DeleteBtn/DeleteBtn';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFilter, getContacts } from 'redux/selectors';
-import { deleteContact } from 'redux/contacts.thunk';
+import { deleteContact, fetchContacts } from 'redux/contacts.thunk';
+import { useEffect } from 'react';
 
 export const ContactsList = () => {
   const filter = useSelector(getFilter);
   const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const handleDeleteContact = id => {
     dispatch(deleteContact(id));
