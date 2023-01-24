@@ -14,7 +14,7 @@ const contactsSlice = createSlice({
   initialState: initialStateForContacts,
   extraReducers: builder => {
     builder
-      .addCase(fetchContacts.pending, (state, action) => {
+      .addCase(fetchContacts.pending, state => {
         state.contacts.isLoading = true;
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
@@ -55,6 +55,4 @@ const contactsSlice = createSlice({
   },
 });
 
-export const { addToContactActions, deleteContactActions } =
-  contactsSlice.actions;
 export const contactReducer = contactsSlice.reducer;

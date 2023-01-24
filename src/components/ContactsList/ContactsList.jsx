@@ -2,7 +2,7 @@ import css from './ContactsList.module.css';
 import { DeleteBtn } from 'components/DeleteBtn/DeleteBtn';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFilter, getContacts } from 'redux/selectors';
-import { deleteContactActions } from 'redux/contactsSlice';
+import { deleteContact } from 'redux/contacts.thunk';
 
 export const ContactsList = () => {
   const filter = useSelector(getFilter);
@@ -10,9 +10,8 @@ export const ContactsList = () => {
   const dispatch = useDispatch();
 
   const handleDeleteContact = id => {
-    dispatch(deleteContactActions(id));
+    dispatch(deleteContact(id));
   };
-  console.log(contacts);
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
