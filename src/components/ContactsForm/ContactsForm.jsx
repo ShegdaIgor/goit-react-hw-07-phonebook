@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToContact } from 'redux/contactsSlice';
+import { addContact } from 'redux/contacts.thunk';
 import { getContacts } from 'redux/selectors';
 import css from './ContactsForm.module.css';
 
@@ -28,7 +28,7 @@ export const ContactsForm = () => {
     ) {
       alert(`${formData.name} is already in contacts`);
     } else {
-      dispatch(addToContact(formData));
+      dispatch(addContact(formData));
     }
 
     setFormData({

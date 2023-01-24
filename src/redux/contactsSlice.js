@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { fetchContactsActionSuccess } from './contacts/contacts.action';
-import { fetchContacts } from './contacts/contacts.thunk';
+import { fetchContacts, addContact, deleteContact } from './contacts.thunk';
 
 const initialStateForContacts = {
   contacts: {
@@ -18,29 +15,46 @@ const contactsSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchContacts.pending, (state, action) => {
-        state.isLoading = true;
+        state.contacts.isLoading = true;
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.items = action.payload;
+        state.contacts.items = action.payload;
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.contacts.error = action.payload;
+      })
+      .addCase(addContact.pending, state => {
+        state.contacts.isLoading = true;
+      })
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = null;
+        state.contacts.items.push(action.payload);
+      })
+      .addCase(addContact.rejected, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = action.payload;
+      })
+      .addCase(deleteContact.pending, state => {
+        state.contacts.isLoading = true;
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = null;
+        state.contacts.items = state.contacts.items.filter(item => {
+          return item.id !== action.payload.id;
+        });
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = action.payload;
       });
   },
 });
 
-const persistConfig = {
-  key: 'contacts',
-  storage,
-};
-
-export const { fetchContactsPending, fetchContactsError } =
+export const { addToContactActions, deleteContactActions } =
   contactsSlice.actions;
-export default contactsSlice.reducer;
-
-export const { addToContact, deleteContact } = contactsSlice.actions;
 export const contactReducer = contactsSlice.reducer;
-export const persistedReducer = persistReducer(persistConfig, contactReducer);
